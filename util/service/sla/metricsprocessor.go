@@ -2,6 +2,7 @@ package rocserv
 
 import (
 	"github.com/julienschmidt/httprouter"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/shawnfeng/sutil/slog"
 	"net/http"
 )
@@ -24,9 +25,10 @@ func (p *Metricsprocessor) Init() error {
 
 func (p *Metricsprocessor) Driver() (string, interface{}) {
 
-	handlerFor := p.Metrics.Exportor()
+	//handlerFor := p.Metrics.Exportor()
 	router := httprouter.New()
-	router.Handler("GET", default_metric_location, handlerFor)
+	//router.Handler("GET", default_metric_location, handlerFor)
+	router.Handler("GET", default_metric_location, promhttp.Handler())
 	//router.Handler("POST", p.location,handlerFor)
 	router.HandlerFunc("GET", "/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
